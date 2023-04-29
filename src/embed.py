@@ -47,11 +47,13 @@ def get_glove_embeddings(df_column, dim=100):
     return embeddings
 
 
-def get_bow_embeddings(df_column, vocab_size=10000):
+
+def get_bow_embeddings(df_column = df_column, min_freq=200)
+
     """
     Inputs:
     df_column: a single column of a data frame of textual data
-    vocab_size: size of vocabulary to be used
+    min_freq: minimum frequency a word needs to appear to be considered
 
     Outputs:
     returns tensor object of BoW representations
@@ -60,8 +62,12 @@ def get_bow_embeddings(df_column, vocab_size=10000):
     words = [word for sentence in df_column for word in nltk.word_tokenize(sentence)]
     word_freqs = Counter(words)
 
+    # Filter out words that appear less than the minimum frequency
+    filtered_words = {word: count for word, count in word_freqs.items() if count >= min_freq}
+
     # Sort the words by frequency and keep only the top vocab_size words
-    reduced_vocab = {word for word, _ in word_freqs.most_common(vocab_size)}
+    sorted_words = sorted(filtered_words.items(), key=lambda x: x[1], reverse=True)
+    reduced_vocab = {word for word, _ in sorted_words}
 
     # Initialize a CountVectorizer object with the reduced vocabulary
     vectorizer = CountVectorizer(vocabulary=reduced_vocab)
@@ -76,3 +82,5 @@ def get_bow_embeddings(df_column, vocab_size=10000):
     tensor_bow = torch.tensor(df_bow.values)
 
     return tensor_bow
+
+
