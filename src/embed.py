@@ -48,7 +48,7 @@ def get_glove_embeddings(df_column, dim=100):
 
 
 
-def get_bow_embeddings(df_column = df_column, min_freq=200)
+def get_bow_embeddings(df_column = df_column, min_freq=200):
 
     """
     Inputs:
