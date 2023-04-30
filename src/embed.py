@@ -16,9 +16,11 @@ nltk.download('punkt')
 
 tokenizer = get_tokenizer('basic_english')
 
+
 def yield_tokens(train_text):
     for text in train_text:
         yield tokenizer(text)
+
 
 def get_vocab(train_df):
     '''
@@ -42,7 +44,7 @@ def collate_into_bow(batch, vocab):
     labels = torch.empty((0,))
     tokens = torch.empty((0, vocab_size))
 
-    for label, token in iter(batch):
+    for token, label in iter(batch):
         labels = torch.cat((labels, torch.tensor([label])), 0)
         row_tokens = [vocab[t] for t in tokenizer(token)]
         cum_freq = torch.bincount(torch.tensor(row_tokens), minlength=vocab_size).resize(1, vocab_size)
@@ -85,8 +87,7 @@ def get_glove_embeddings(df_column, dim=100):
     return embeddings
 
 
-
-def get_bow_embeddings(df_column = df_column, min_freq=200):
+def get_bow_embeddings(df_column, min_freq=200):
 
     """
     Inputs:
