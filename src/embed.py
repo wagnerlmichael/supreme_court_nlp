@@ -1,16 +1,54 @@
 import torch
-import numpy as np
 import nltk
+import numpy as np
+import pandas as pd
 from sklearn.feature_extraction.text import CountVectorizer
 from torchtext.vocab import GloVe
 from collections import Counter
-import pandas as pd
+from torchtext.data.utils import get_tokenizer
+from torchtext.vocab import build_vocab_from_iterator
 
 import ssl
 ssl._create_default_https_context = ssl._create_unverified_context
 
 # pre trained model for tokenizing
 nltk.download('punkt')
+
+tokenizer = get_tokenizer('basic_english')
+
+def yield_tokens(train_text):
+    for text in train_text:
+        yield tokenizer(text)
+
+def get_vocab(train_df):
+    '''
+    '''
+    # Build vocab using iterator
+    vocab = build_vocab_from_iterator(yield_tokens(train_df['text']), specials=['<unk>'], min_freq=100)
+
+    # Get a list of tokens
+    # vocab_list = list(vocab.get_itos())
+
+    # Set <unk> index as default
+    default_index = vocab['<unk>']
+    vocab.set_default_index(default_index)
+
+    return vocab
+
+def collate_into_bow(batch, vocab):
+    '''
+    '''
+    vocab_size = len(vocab)
+    labels = torch.empty((0,))
+    tokens = torch.empty((0, vocab_size))
+
+    for label, token in iter(batch):
+        labels = torch.cat((labels, torch.tensor([label])), 0)
+        row_tokens = [vocab[t] for t in tokenizer(token)]
+        cum_freq = torch.bincount(torch.tensor(row_tokens), minlength=vocab_size).resize(1, vocab_size)
+        tokens = torch.cat((tokens, cum_freq / (torch.sum(cum_freq) + 1e-7)), 0) 
+
+    return labels, tokens
 
 
 def get_glove_embeddings(df_column, dim=100):
