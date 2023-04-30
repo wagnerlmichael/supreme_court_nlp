@@ -22,11 +22,11 @@ def yield_tokens(train_text):
         yield tokenizer(text)
 
 
-def get_vocab(train_df):
+def get_vocab(train_df, min_freq=100):
     '''
     '''
     # Build vocab using iterator
-    vocab = build_vocab_from_iterator(yield_tokens(train_df['text']), specials=['<unk>'], min_freq=100)
+    vocab = build_vocab_from_iterator(yield_tokens(train_df['text']), specials=['<unk>'], min_freq=min_freq)
 
     # Get a list of tokens
     # vocab_list = list(vocab.get_itos())
