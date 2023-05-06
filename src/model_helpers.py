@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+from sklearn.metrics import roc_curve
+from numpy import sqrt, argmax
 
 from sklearn.metrics import confusion_matrix, accuracy_score
 
@@ -32,7 +34,6 @@ def train_an_epoch(model, dataloader, optimizer, loss_function):
     return
 
 
-
 def get_accuracy(model, dataloader, threshold=0.5):
     '''
     Get dataset accuracy of binary classification model. 
@@ -58,18 +59,17 @@ def get_accuracy(model, dataloader, threshold=0.5):
         return total_correct / total
 
 
-def get_test_results_df(model, dataloader, test_info):
+def make_predictions(model, dataloader): 
     '''
-    Gets test results df by consolidating the case utterance probablity
-        predictions with the relevant case ids
+    Make predictions from model. 
 
     Inputs:
         model (model object)
         dataloader (dataloader object)
-        test_info (pd.Dataframe)
 
     Returns:
-        test_results (pd.Dataframe)
+        labels (numpy array): real y
+        probs (numpy array): predicted y probabilities
     '''
     model.eval()
     with torch.no_grad():
@@ -79,15 +79,29 @@ def get_test_results_df(model, dataloader, test_info):
             log_probs = model(text).squeeze(1)
             probs = torch.concatenate((probs, log_probs))
             labels = torch.concatenate((labels, label))
-        labels = labels.numpy()
-        probs = probs.numpy()
+    return labels.numpy(), probs.numpy()
 
-        test_info['labels'] = labels
-        test_info['prob'] = probs
 
-        return test_info
+def get_test_results_df(model, dataloader, test_info):
+    '''
+    Gets test results df by consolidating the case utterance probablity
+    predictions with the relevant case ids
 
-def results_heatmap(y_pred, y, title, target_names = []):
+    Inputs:
+        model (model object)
+        dataloader (dataloader object)
+        test_info (pd.Dataframe)
+
+    Returns:
+        test_results (pd.Dataframe)
+    '''
+    labels, probs = make_predictions(model, dataloader)
+    test_info['labels'] = labels
+    test_info['prob'] = probs
+    return test_info
+
+
+def results_heatmap(y, y_pred, title, target_names = []):
     '''
     Create confusion matrix heatmap of results.
 
@@ -113,3 +127,35 @@ def results_heatmap(y_pred, y, title, target_names = []):
     plt.yticks(rotation=0)
     plt.show(block=False)
 
+
+def select_threshold(y, y_pred, print_results=True):
+    '''
+    Calculate validation ROC curve and select best threshold.
+
+    Input: 
+        y (Pandas series): real value of y
+        y_pred (Pandas series): y predictions
+        print_results (bool): if True, print best threshold and ROC curve plot
+
+    Returns:
+        threshold (float): best threshold from validation predictions
+    '''
+    # ROC curve
+    fpr, tpr, thresholds = roc_curve(y, y_pred)
+    # Calculate the g-mean for each threshold
+    gmeans = sqrt(tpr * (1-fpr))
+    # Locate largest g-mean
+    ix = argmax(gmeans)
+    threshold = thresholds[ix]
+    if print_results: 
+        print('Best Threshold=%f, G-Mean=%.3f' % (threshold, gmeans[ix]))
+        # Plot the roc curve for the model
+        plt.plot([0,1], [0,1], linestyle='--', label='Random Classifier')
+        plt.plot(fpr, tpr, marker='.', label='Model')
+        plt.scatter(fpr[ix], tpr[ix], marker='o', color='black', label='Best')
+        plt.xlabel('False Positive Rate')
+        plt.ylabel('True Positive Rate')
+        plt.legend()
+        plt.show()
+
+    return threshold
