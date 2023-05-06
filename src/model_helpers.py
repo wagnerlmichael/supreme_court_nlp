@@ -1,6 +1,10 @@
 import torch
 import pandas as pd
 import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+from sklearn.metrics import confusion_matrix, accuracy_score
 
 
 def train_an_epoch(model, dataloader, optimizer, loss_function):
@@ -82,3 +86,30 @@ def get_test_results_df(model, dataloader, test_info):
         test_info['prob'] = probs
 
         return test_info
+
+def results_heatmap(y_pred, y, title, target_names = []):
+    '''
+    Create confusion matrix heatmap of results.
+
+    Inputs: 
+        y_pred (Pandas series): y predictions
+        y (Pandas series): real value of y
+        title (string): Plot title
+    
+    Returns: 
+        Matplotlib heatmap of confusion matrix results
+    '''
+
+    target_names = target_names
+    #cm = confusion_matrix(y_pred, y, normalize='all')
+    cm = confusion_matrix(y_pred, y)
+    # Normalise by row
+    #cmn = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+    fig, ax = plt.subplots(figsize=(6,6))
+    sns.heatmap(cm, annot=True, cmap='crest', fmt='.0f', xticklabels=target_names, yticklabels=target_names)
+    ax.set_title(title + f'\nAccuracy: {round(accuracy_score(y_pred,y), 4)}', fontsize=12)
+    plt.ylabel('Predicted')
+    plt.xlabel('Actual Value')
+    plt.yticks(rotation=0)
+    plt.show(block=False)
+
