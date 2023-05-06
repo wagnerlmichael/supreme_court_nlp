@@ -19,13 +19,15 @@ class BoWNNClassifier(nn.Module):
  
         super(BoWNNClassifier, self).__init__()
 
-        self.linear1 = nn.Linear(vocab_size, hidden_dim)
-        self.activation = nn.ReLU()
-        self.linear2 = nn.Linear(hidden_dim, output_dim)
-        self.activation2 = nn.Sigmoid()
         self.vocab_size = vocab_size
         self.hidden_dim = hidden_dim
         self.output_dim = output_dim
+
+        self.linear1 = nn.Linear(self.vocab_size, self.hidden_dim)
+        self.activation = nn.ReLU()
+        self.linear2 = nn.Linear(self.hidden_dim, self.output_dim)
+        self.activation2 = nn.Sigmoid()
+
 
     def forward(self, batch):
         batch = self.linear1(batch)
