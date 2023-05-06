@@ -29,7 +29,7 @@ def train_an_epoch(model, dataloader, optimizer, loss_function):
         loss.backward()
         optimizer.step()
         if idx % log_interval == 0 and idx > 0:
-            print(f'At iteration {idx} the loss is {loss:.3f}.')
+            print(f'At iteration {idx} the train loss is {loss:.3f}.')
 
     return
 
@@ -101,13 +101,13 @@ def get_test_results_df(model, dataloader, test_info):
     return test_info
 
 
-def results_heatmap(y, y_pred, title, target_names = []):
+def results_heatmap(y_true, y_pred, title, target_names = []):
     '''
     Create confusion matrix heatmap of results.
 
     Inputs: 
-        y_pred (Pandas series): y predictions
-        y (Pandas series): real value of y
+        y_pred (Pandas series)
+        y_true (Pandas series)
         title (string): Plot title
     
     Returns: 
@@ -116,32 +116,32 @@ def results_heatmap(y, y_pred, title, target_names = []):
 
     target_names = target_names
     #cm = confusion_matrix(y_pred, y, normalize='all')
-    cm = confusion_matrix(y_pred, y)
+    cm = confusion_matrix(y_true, y_pred)
     # Normalise by row
     #cmn = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
     fig, ax = plt.subplots(figsize=(6,6))
     sns.heatmap(cm, annot=True, cmap='crest', fmt='.0f', xticklabels=target_names, yticklabels=target_names)
-    ax.set_title(title + f'\nAccuracy: {round(accuracy_score(y_pred,y), 4)}', fontsize=12)
+    ax.set_title(title + f'\nAccuracy: {round(accuracy_score(y_pred, y_true), 4)}', fontsize=12)
     plt.ylabel('Predicted')
     plt.xlabel('Actual Value')
     plt.yticks(rotation=0)
     plt.show(block=False)
 
 
-def select_threshold(y, y_pred, print_results=True):
+def select_threshold(y_true, y_pred, print_results=True):
     '''
     Calculate validation ROC curve and select best threshold.
 
     Input: 
-        y (Pandas series): real value of y
-        y_pred (Pandas series): y predictions
+        y_true (Pandas series)
+        y_pred (Pandas series)
         print_results (bool): if True, print best threshold and ROC curve plot
 
     Returns:
         threshold (float): best threshold from validation predictions
     '''
     # ROC curve
-    fpr, tpr, thresholds = roc_curve(y, y_pred)
+    fpr, tpr, thresholds = roc_curve(y_true, y_pred)
     # Calculate the g-mean for each threshold
     gmeans = sqrt(tpr * (1-fpr))
     # Locate largest g-mean
