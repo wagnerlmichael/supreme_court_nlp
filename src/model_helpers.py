@@ -122,8 +122,8 @@ def results_heatmap(y_true, y_pred, title, target_names = []):
     fig, ax = plt.subplots(figsize=(6,6))
     sns.heatmap(cm, annot=True, cmap='crest', fmt='.0f', xticklabels=target_names, yticklabels=target_names)
     ax.set_title(title + f'\nAccuracy: {round(accuracy_score(y_pred, y_true), 4)}', fontsize=12)
-    plt.ylabel('Predicted')
-    plt.xlabel('Actual Value')
+    plt.ylabel('True Value')
+    plt.xlabel('Predicted Value')
     plt.yticks(rotation=0)
     plt.show(block=False)
 
