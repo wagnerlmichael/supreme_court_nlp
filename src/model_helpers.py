@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-from sklearn.metrics import roc_curve
+from sklearn.metrics import roc_curve, roc_auc_score, accuracy_score, f1_score
 from numpy import sqrt, argmax
 
 from sklearn.metrics import confusion_matrix, accuracy_score
@@ -57,6 +57,16 @@ def get_accuracy(model, dataloader, threshold=0.5):
             total_correct += sum(classifs == label).item()
             total += len(label)
         return total_correct / total
+
+
+def get_evaluation_metrix(y_true, y_pred):
+    '''
+    Return F1, ROC AUC, and accuracy.
+    '''
+    metrics = {'f1': f1_score(y_true, y_pred),
+                'roc_auc': roc_auc_score(y_true, y_pred),
+                'accuracy': accuracy_score(y_true, y_pred)}
+    return metrics
 
 
 def make_predictions(model, dataloader): 
@@ -122,8 +132,8 @@ def results_heatmap(y_true, y_pred, title, target_names = []):
     fig, ax = plt.subplots(figsize=(6,6))
     sns.heatmap(cm, annot=True, cmap='crest', fmt='.0f', xticklabels=target_names, yticklabels=target_names)
     ax.set_title(title + f'\nAccuracy: {round(accuracy_score(y_pred, y_true), 4)}', fontsize=12)
-    plt.ylabel('Predicted')
-    plt.xlabel('Actual Value')
+    plt.ylabel('True Value')
+    plt.xlabel('Predicted Value')
     plt.yticks(rotation=0)
     plt.show(block=False)
 
