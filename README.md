@@ -2,3 +2,10 @@
 
 ### Authors: *Núria Adell Raventós, Jonas Heim, Matt Kaufmann, Sergio Olalla Ubierna, Michael Wagner*
 
+## Data Cleaning
+
+## Exploratory Data Analysis
+
+## Helper Functions
+
+## Modeling
