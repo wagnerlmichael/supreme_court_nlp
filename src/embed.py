@@ -47,7 +47,7 @@ def get_vocab(train_df, min_freq=100):
     return vocab
 
 
-def collate_into_bow(batch, vocab):
+def collate_into_bow(batch, vocab, label_name='win_side'):
     '''
     Get labels and BoW tokenized text from batch. 
 
@@ -64,7 +64,7 @@ def collate_into_bow(batch, vocab):
     tokens = torch.empty((0, vocab_size))
 
     for val in iter(batch):
-        label = val['win_side']
+        label = val[label_name]
         token = val['text']
         labels = torch.cat((labels, torch.tensor([label])), 0)
         row_tokens = [vocab[t] for t in tokenizer(token)]
