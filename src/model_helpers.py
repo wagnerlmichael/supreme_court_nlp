@@ -9,7 +9,7 @@ from numpy import sqrt, argmax
 from sklearn.metrics import confusion_matrix, accuracy_score
 
 
-def train_an_epoch(model, dataloader, optimizer, loss_function):
+def train_an_epoch(model, dataloader, optimizer, loss_function, print_val=False):
     '''
     Train an epoch of the model.
 
@@ -20,7 +20,7 @@ def train_an_epoch(model, dataloader, optimizer, loss_function):
         loss_function (torch.nn): PyTorch loss function, e.g. BCELoss()
     '''
     model.train()
-    log_interval = 200
+    log_interval = 1000
 
     for idx, (label, text) in enumerate(dataloader):
         model.zero_grad()
@@ -28,8 +28,9 @@ def train_an_epoch(model, dataloader, optimizer, loss_function):
         loss = loss_function(log_probs, label)
         loss.backward()
         optimizer.step()
-        if idx % log_interval == 0 and idx > 0:
-            print(f'At iteration {idx} the train loss is {loss:.3f}.')
+        if print_val:
+            if idx % log_interval == 0 and idx > 0:
+                print(f'At iteration {idx} the train loss is {loss:.3f}.')
 
     return
 
@@ -59,7 +60,7 @@ def get_accuracy(model, dataloader, threshold=0.5):
         return total_correct / total
 
 
-def get_evaluation_metrix(y_true, y_pred):
+def get_evaluation_matrix(y_true, y_pred):
     '''
     Return F1, ROC AUC, and accuracy.
     '''

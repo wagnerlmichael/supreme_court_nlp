@@ -74,35 +74,7 @@ def collate_into_bow(batch, vocab):
     return labels, tokens
 
 
-def collate_into_bow_old(batch, vocab):
-    '''
-    Get labels and BoW tokenized text from batch. 
-
-    Inputs: 
-        batch (torch DataLoader batch): with text and label
-        vocab (tortext.vocab): vocabulary for BoW
-    
-    Returns: 
-        labels (PyTorch Tensor)
-        tokens (PyTorch Tensor): BoW tokenized text from batch
-    '''
-    vocab_size = len(vocab)
-    labels = torch.empty((0,))
-    tokens = torch.empty((0, vocab_size))
-
-    for label, token in iter(batch):
-        print(label)
-        print(token)
-        print(torch.tensor([label]))
-        labels = torch.cat((labels, torch.tensor([label])), 0)
-        row_tokens = [vocab[t] for t in tokenizer(token)]
-        cum_freq = torch.bincount(torch.tensor(row_tokens), minlength=vocab_size).resize(1, vocab_size)
-        tokens = torch.cat((tokens, cum_freq / (torch.sum(cum_freq) + 1e-7)), 0) 
-
-    return labels, tokens
-
-
-def collate_into_cbow(batch):
+def collate_into_cbow(batch, label_name='win_side'):
     '''
     Get labels and Continuous BoW tokenized text from batch. 
 
@@ -115,7 +87,9 @@ def collate_into_cbow(batch):
     '''
     labels = torch.empty((0,))
     tokens = torch.empty((0, 300))
-    for label, token in iter(batch):
+    for val in iter(batch):
+        label = val[label_name]
+        token = val['text']
         labels = torch.cat((labels, torch.tensor([label])), 0)
         words = tokenizer(token)
         vecs = glove.get_vecs_by_tokens(words)
