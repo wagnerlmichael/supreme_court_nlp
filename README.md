@@ -5,7 +5,7 @@
 ## Data Cleaning
 
 This project involved multiple data cleaning/data wrangling steps. These scripts can be found in
-* `/text_cleaning/ flattener_with_filter.ipynb`
+* `/text_cleaning/flattener_with_filter.ipynb`
 * `/text_cleaning/utterance_flattener.ipynb`
 
 ## Exploratory Data Analysis
