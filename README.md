@@ -4,8 +4,20 @@
 
 ## Data Cleaning
 
+This project involved multiple data cleaning/data wrangling steps. These scripts can be found in
+* `/case_info_parsing/flattener.ipynb`
+* `/case_info_parsing/flattener.ipynb`
+* `/text_cleaning/utterance_flattener.ipynb`
+
 ## Exploratory Data Analysis
 
+Our exploratory data analysis is found in the `/eda` directory with some key notebooks listed here:
+* `/eda/summary_stats.ipynb`
+* `/eda/eda.ipynb`
+* `/eda/new_baselines.ipynb`
+
 ## Helper Functions
+
+In order to make our modeling code more concise, we abstract a lot of our functions away in the `/src` directory.
 
 ## Modeling
