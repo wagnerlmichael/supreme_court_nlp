@@ -22,6 +22,16 @@ Our exploratory data analysis is found in the `/eda` directory with some key not
 
 ## Helper Functions
 
-In order to make our modeling code more concise, we abstract a lot of our functions away in the `/src` directory.
+While we originally intended to abstract all repetitive functions into helpers, we were only able to do this for models that were done locally (i.e. bag of words models) given difficulties in syncing Google Collab and Github.
+
+The helper functions for bag of words models are in the `/src` directory.
 
 ## Modeling
+
+We ran multiple NLP models, which can be found in the `modeling` directory. Each model received its own notebook as noted in the titles of the notebooks
+
+* `longformer.ipynb`
+* `bert.ipynb`
+* `bigbird.ipynb`
+* `bow.ipynb`
+* `cbow.ipynb`
