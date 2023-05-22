@@ -8,6 +8,5 @@ We perfomed exploratory data analysis on the data we used and computed the basel
 
 * `baseline.ipynb`
 * `eda.ipynb`
-* `new_baselines.ipynb`
 * `sentiment_baseline.ipynb`
 * `summary_stats.ipynb`
