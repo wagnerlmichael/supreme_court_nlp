@@ -44,4 +44,4 @@ We ran multiple NLP models, which can be found in the `modeling` directory. Each
 
 Our `results` directory contains our final report and poster for the project. The poster can be found below:
 
-![Results poster](https://github.com/wagnerlmichael/supreme_court_nlp/blob/main/results/Poster.pdf)
+![Results poster](https://github.com/wagnerlmichael/supreme_court_nlp/blob/main/results/Poster.jpg)
