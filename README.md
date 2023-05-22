@@ -30,8 +30,11 @@ The helper functions for bag of words models are in the `/src` directory.
 
 We ran multiple NLP models, which can be found in the `modeling` directory. Each model received its own notebook as noted in the titles of the notebooks
 
-* `longformer.ipynb`
 * `bert.ipynb`
 * `bigbird.ipynb`
 * `bow.ipynb`
 * `cbow.ipynb`
+* `longformer.ipynb`
+* `Roberta.ipynb`
+* `Roberta_NotRandom.ipynb`
+* `sentiment_judge.ipynb`
