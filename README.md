@@ -29,7 +29,7 @@ The helper functions for bag of words models are in the `/src` directory.
 
 ## Modeling
 
-We ran multiple NLP models, which can be found in the `modeling` directory. Each model received its own notebook as noted in the titles of the notebooks
+We ran multiple NLP models, which can be found in the `modeling` directory. Each model received its own notebook as noted in the titles of the notebooks. All were run in Google Collab with the exception of the `bow`, `cbow`, and `sentiment_judge` given size of data and number of epochs.
 
 * `bert.ipynb`
 * `bigbird.ipynb`
@@ -39,3 +39,9 @@ We ran multiple NLP models, which can be found in the `modeling` directory. Each
 * `Roberta.ipynb`
 * `Roberta_NotRandom.ipynb`
 * `sentiment_judge.ipynb`
+
+## Results
+
+Our `results` directory contains our final report and poster for the project. The poster can be found below:
+
+![Results poster](image link)
