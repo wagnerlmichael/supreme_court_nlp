@@ -16,6 +16,7 @@ The utterance flattener notebook output is the csv files that can be found in th
 ## Exploratory Data Analysis
 
 Our exploratory data analysis is found in the `/eda` directory with some key notebooks listed here:
+* `/eda/sentiment_baseline.ipynb`
 * `/eda/summary_stats.ipynb`
 * `/eda/eda.ipynb`
 * `/eda/new_baselines.ipynb`
